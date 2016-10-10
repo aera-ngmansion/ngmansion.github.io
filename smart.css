@@ -1,0 +1,71 @@
+body {
+background-image: url(space_0003a.jpg);
+color: #ffffff;
+}
+
+#pagebady {
+font-size: 100%;
+background-color: #333333;
+margin: 10px auto
+}
+
+header {
+margin: 5px 5px
+}
+
+article {
+margin: 5px 5px
+}
+
+
+aside {
+margin: 5px 5px
+}
+
+p {
+text-align: center; 
+}
+
+a:link { color: #ffffff; }
+a:visited { color: #ffffff; }
+a:hover {
+position: relative;
+top: 1px;
+left: 1px;
+text-decoration: none;
+}
+a:active { color: #ffffff; }
+
+ul {
+list-style-type: none;
+}
+
+ol {
+list-style-type: none; 
+}
+
+h1, h2, span {
+border-color: #ccccff;
+border-style: solid;
+}
+
+h1 {
+border-top-width: 0;
+border-right-width: 0;
+border-bottom-width: 3px;
+border-left-width: 10px;
+}
+
+h2 {
+border-top-width: 0;
+border-right-width: 0;
+border-bottom-width: 1px;
+border-left-width: 5px;
+}
+
+
+.clearfix:after {
+  content: "";
+  clear: both;
+  display: block;
+}
