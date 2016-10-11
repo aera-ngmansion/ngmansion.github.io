@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML><HEAD><TITLE>ARM7TDMI</TITLE>
-<META content="text/html; charset=Shift_JIS" http-equiv=Content-Type>
+<META content="text/html; charset=UTF-8" http-equiv=Content-Type>
 <META name=robots content=noindex,nofollow><LINK rel=stylesheet type=text/css 
 href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/p.css"><LINK rel=stylesheet 
 type=text/css 
@@ -17,134 +17,134 @@ src="http://www.livedoor.com/js/lcslog.js">
 <DIV align=center>
 <P class=border>ARM7TDMI</P>
 <P>&nbsp;</P>
-<P align=left>GBA�ɓ��ڂ���Ă���CPU��ARM7TDMI�̖��߂��ȒP�ɐ������܂��B</P>
-<P align=left>ARM�nCPU�ɂ�ARM���߁i32bit�j��Thumb���߁i16bit�j������܂����AGBA���g�уQ�[���@�Ƃ������Ƃ���</P>
-<P align=left>Thumb���߂�����d�͂��傫��ARM���߂́A�Q�[����̃X�e�[�^�X�̒l��t���O�̒l���̏����ɂ͂�</P>
-<P align=left>�Ƃ�ǎg���܂���B�Ƃ������Ƃ�Thumb���߂̂ݐ������邱�Ƃɂ��܂��B</P>
+<P align=left>GBAに搭載されているCPUのARM7TDMIの命令を簡単に説明します。</P>
+<P align=left>ARM系CPUにはARM命令（32bit）とThumb命令（16bit）がありますが、GBAが携帯ゲーム機ということから</P>
+<P align=left>Thumb命令より消費電力が大きいARM命令は、ゲーム上のステータスの値やフラグの値等の処理にはほ</P>
+<P align=left>とんど使われません。ということでThumb命令のみ説明することにします。</P>
 <HR>
 
-<P class=border>�����̑O��</P>
-<P><FONT color=#ff0000>����{�I�ȉ����̒m���������Ă��邱�Ƃ������ł��B</FONT></P>
-<P><FONT color=#ff0000>������̃y�[�W���쐬����ɓ������āA[ARM 
-MEMO]�A[���t�@�����X�}�j���A��]���Q�l�ɂ����Ă��炢�܂����B</FONT></P>
-<P><FONT color=#ff0000>�����ɂ����̂́A���������������B</FONT></P>
-<P>�����߂��������̍ۂɎg���Ă���Rd,Rs,Rn��R0�`R7�܂ŁAHd,Hs��R8�`R15�܂ł̔ėp���W�X�^���g�p�\�B</P>
-<P>��$0x??��16�i���A#???��10�i����\���܂��B</P>
-<P>��#Offset5�A#Offset8��5�A8�r�b�g���̃I�t�Z�b�g��\���܂��B</P>
-<P>��imm�͐��l�ł��i10�i��&amp;16�i�������̌`���ŋL�q�\�j�B����̐����ł͊�{�I�ɂ�10�i���Ƃ��Ĉ����Ă����܂��B</P>
-<P>���_�����Z�ɂ��Ă킩��Ȃ�������A���̂Ƃ���ŕ׋����Ă��������B</P>
-<P>���l�b�g��ɂ�GBA�iARM�j�p�̃A�Z���u��������܂��̂ŁA�o�C�i���G���R�[�f�B���O�͏Ȃ��܂��B</P>
-<P>���{���Ȃ�΂����Əڍׂɐ��������Ȃ���΂����Ȃ��Ǝv���܂����AARM�n��CPU��GBA�̃v���O������g�ނ̂ł͂Ȃ��A</P>
-<P>�@�����܂ł��@GBA��ł�����Ƃ����v���O����������p���T�C�g���[�`��������邱�Ƃ�ړI�Ƃ��Ă���̂ŏȂ��܂��B</P>
-<P>���{���ɓK���ɏ��������Ȃ̂ŁA����ȏ�ڂ�����񂪒m�肽�����<A 
-href="http://www.arm.com/">ARM</A>�ցB�A�����t�@�����X�}�j���A���͉p��ł��B</P>
+<P class=border>説明の前に</P>
+<P><FONT color=#ff0000>※基本的な改造の知識を持っていることが条件です。</FONT></P>
+<P><FONT color=#ff0000>※今回のページを作成するに当たって、[ARM 
+MEMO]、[リファレンスマニュアル]を参考にさせてもらいました。</FONT></P>
+<P><FONT color=#ff0000>※見にくいのは、ご了承ください。</FONT></P>
+<P>※命令を説明するの際に使われているRd,Rs,RnはR0～R7まで、Hd,HsはR8～R15までの汎用レジスタが使用可能。</P>
+<P>※$0x??は16進数、#???は10進数を表します。</P>
+<P>※#Offset5、#Offset8は5、8ビット長のオフセットを表します。</P>
+<P>※immは数値です（10進数&amp;16進数両方の形式で記述可能）。今回の説明では基本的には10進数として扱っていきます。</P>
+<P>※論理演算についてわからなかったら、他のところで勉強してください。</P>
+<P>※ネット上にはGBA（ARM）用のアセンブラがありますので、バイナリエンコーディングは省きます。</P>
+<P>※本来ならばもっと詳細に説明をしなければいけないと思いますが、ARM系のCPUでGBAのプログラムを組むのではなく、</P>
+<P>　あくまでも　GBA上でちょっとしたプログラム改造やパラサイトルーチン等を作ることを目的としているので省きます。</P>
+<P>※本当に適当に書いた物なので、これ以上詳しい情報が知りたければ<A 
+href="http://www.arm.com/">ARM</A>へ。但しリファレンスマニュアルは英語です。</P>
 <HR>
 
-<P class=border align=center>�V���[�g�J�b�g</P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Register">���W�X�^</A></P>
+<P class=border align=center>ショートカット</P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Register">レジスタ</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Condition">�����t���O</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Condition">条件フラグ</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#ALU">�����t���O���Z�b�g���閽��</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#ALU">条件フラグをセットする命令</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#S_R">�V�t�g/���[�e�C�g����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Add">���Z����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Sub">���Z����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Cmp">��r����</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#S_R">シフト/ローテイト命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Add">加算命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Sub">減算命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Cmp">比較命令</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Logical">�_�����Z����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Mov">�i�[����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Mul">�ώZ����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Neg">�������]����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Str">�X�g�A����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Ldr">���[�h����</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Logical">論理演算命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Mov">格納命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Mul">積算命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Neg">符号反転命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Str">ストア命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Ldr">ロード命令</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#P_P">PUSH/POP����</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#P_P">PUSH/POP命令</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Stm_Ldm">�����̃��W�X�^�̃��[�h�A�X�g�A����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Nop">NOP����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Branch">�������򖽗�</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Jmp">���������򖽗�</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Stm_Ldm">複数のレジスタのロード、ストア命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Nop">NOP命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Branch">条件分岐命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Jmp">無条件分岐命令</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Swi">�\�t�g�E�F�A���荞�ݖ���</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Swi">ソフトウェア割り込み命令</A></P>
 <P><A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Break">�u���[�N�|�C���g����</A></P>
-<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Loop">�������[�v�̗�</A></P>
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Break">ブレークポイント命令</A></P>
+<P><A href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Loop">条件ループの例</A></P>
 <HR>
 
-<P class=border align=left><A name=Register></A>���W�X�^</P>
-<P align=left>���W�X�^�͈ȉ���32bit���W�X�^���g�p�ł��܂��B</P>
+<P class=border align=left><A name=Register></A>レジスタ</P>
+<P align=left>レジスタは以下の32bitレジスタが使用できます。</P>
 <DIV align=left>
 <TABLE border=1 width="24%" bgColor=#000000>
   <TBODY>
   <TR>
     <TD bgColor=#000000 width="29%">R0</TD>
-    <TD bgColor=#000000 width="71%">32bit�ėp���W�X�^</TD></TR>
+    <TD bgColor=#000000 width="71%">32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R1</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R2</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R3</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R4</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R5</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R6</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R7</TD>
-    <TD>32bit�ėp���W�X�^</TD></TR>
+    <TD>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD bgColor=#999999>R8</TD>
-    <TD bgColor=#999999>32bit�ėp���W�X�^</TD></TR>
+    <TD bgColor=#999999>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD bgColor=#999999>R9</TD>
-    <TD bgColor=#999999>32bit�ėp���W�X�^</TD></TR>
+    <TD bgColor=#999999>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD bgColor=#999999>R10</TD>
-    <TD bgColor=#999999>32bit�ėp���W�X�^</TD></TR>
+    <TD bgColor=#999999>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD bgColor=#999999>R11</TD>
-    <TD bgColor=#999999>32bit�ėp���W�X�^</TD></TR>
+    <TD bgColor=#999999>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD bgColor=#999999>R12</TD>
-    <TD bgColor=#999999>32bit�ėp���W�X�^</TD></TR>
+    <TD bgColor=#999999>32bit汎用レジスタ</TD></TR>
   <TR>
     <TD>R13(SP)</TD>
-    <TD>�X�^�b�N�|�C���^</TD></TR>
+    <TD>スタックポインタ</TD></TR>
   <TR>
     <TD>R14(LR)</TD>
-    <TD>�����N���W�X�^</TD></TR>
+    <TD>リンクレジスタ</TD></TR>
   <TR>
     <TD>R15(PC)</TD>
-    <TD>�v���O�����J�E���^</TD></TR>
+    <TD>プログラムカウンタ</TD></TR>
   <TR>
     <TD bgColor=#999999>CPSR</TD>
-    <TD bgColor=#999999>�J�����g�X�e�[�^�X���W�X�^</TD></TR></TBODY></TABLE>
-<P><FONT color=#999999>���D�F�Ŏ�����Ă���̂�Thumb�X�e�[�g���ɒʏ�g��Ȃ����W�X�^�ł��B</FONT></P>
-<P>��Thumb�X�e�[�g���ɂ�R8�`R15�͎l�����Z���A�ėp���W�X�^�Ƃ��Ďg�����Ƃ͂ł��Ȃ����A����I�Ȏ�i�ŃA�N�Z�X���\�B</P>
-<P>�����ɂ����W�X�^�͑��݂��܂����A���[�U�[�E���x���v���O�����ł͂��̒��x�����g��Ȃ��Ɣ��f���܂����B</P>
-<P>�@ �X�[�p�[�o�C�U�[�A�V�X�e�����x���ł͑��̃��W�X�^���g���܂��B</P>
-<P>��R0�`R7�܂ł�Lo���W�X�^�i���ʃ��W�X�^�j�AR8�`R15�܂ł�Hi���W�X�^�i��ʃ��W�X�^�j�ƌĂт܂��B</P>
-<P>��R13(SP)�̃X�^�b�N�|�C���^��POP/PUSH���߂ňꎞ�I�ɐ��l���i�[���Ă������W�X�^�ł��B</P>
-<P>��R14(LR)�̃����N���W�X�^��BL���ߓ��ŃT�u���[�`���ɔ�ԏꍇ�ɁA���̎��̃A�h���X���i�[���Ă������W�X�^�ł��B</P>
-<P>�@ [0x8000000]����T�u���[�`���ɔ�ԏꍇ�A����[0x8000002]���i�[���܂��B�iARM 
-State���̏ꍇ�́A[0x8000000]�ł���΁A[0x8000004]�������܂��j</P>
-<P>��R15(PC)�̃v���O�����J�E���^�́A���Ɏ��s����閽�߂̃A�h���X���i�[���Ă������W�X�^�ł��B</P>
-<P>�@ 
-���ݎ��s����Ă���̂�[0x8000000]�ł���΁A�v���O�����J�E���^��[0x8000002]�������܂��B[0x8000002]��������A[0x8000004]�Ƃ��������ł��B</P>
-<P>�@ �iARM State���̏ꍇ�́A[0x8000000]�ł���΁A[0x8000004]�������܂��j</P>
-<P>�@ BL���߂ŃT�u���[�`���ɔ�сA���̃A�h���X�ɕ��A�������ꍇ�́A[MOV PC,LR]�ƋL�q���Ă��Ɨǂ��ł��B</P>
+    <TD bgColor=#999999>カレントステータスレジスタ</TD></TR></TBODY></TABLE>
+<P><FONT color=#999999>※灰色で示されているのがThumbステート時に通常使わないレジスタです。</FONT></P>
+<P>※Thumbステート時にはR8～R15は四則演算等、汎用レジスタとして使うことはできないが、限定的な手段でアクセスが可能。</P>
+<P>※他にもレジスタは存在しますが、ユーザー・レベルプログラムではこの程度しか使わないと判断しました。</P>
+<P>　 スーパーバイザー、システムレベルでは他のレジスタも使えます。</P>
+<P>※R0～R7までをLoレジスタ（下位レジスタ）、R8～R15までをHiレジスタ（上位レジスタ）と呼びます。</P>
+<P>※R13(SP)のスタックポインタはPOP/PUSH命令で一時的に数値を格納しておくレジスタです。</P>
+<P>※R14(LR)のリンクレジスタはBL命令等でサブルーチンに飛ぶ場合に、その次のアドレスを格納しておくレジスタです。</P>
+<P>　 [0x8000000]からサブルーチンに飛ぶ場合、次の[0x8000002]を格納します。（ARM 
+State時の場合は、[0x8000000]であれば、[0x8000004]を示します）</P>
+<P>※R15(PC)のプログラムカウンタは、次に実行される命令のアドレスを格納しておくレジスタです。</P>
+<P>　 
+現在実行されているのが[0x8000000]であれば、プログラムカウンタは[0x8000002]を示します。[0x8000002]だったら、[0x8000004]という感じです。</P>
+<P>　 （ARM State時の場合は、[0x8000000]であれば、[0x8000004]を示します）</P>
+<P>　 BL命令でサブルーチンに飛び、元のアドレスに復帰したい場合は、[MOV PC,LR]と記述してやると良いです。</P>
 <HR>
 
-<P class=border><A name=Condition></A>�����t���O</P>
+<P class=border><A name=Condition></A>条件フラグ</P>
 <TABLE border=1 width="32%">
   <TBODY>
   <TR>
@@ -168,628 +168,628 @@ State���̏ꍇ�́A[0x8000000]�ł���΁A[0x8000004]�������܂��j</P>
   <TR bgColor=#999999>
     <TD height=19 vAlign=center align=middle>T</TD>
     <TD>THUMB State</TD></TR></TBODY></TABLE>
-<P>�⑫�F�����t���O�Ƃ�ALU���Z�̌��ʂ�CPSR�i�J�����g�X�e�[�^�X���W�X�^�́j��ON�i1�j�AOFF�i0�j�ɂ������̂̂��Ƃł��B�������߂̎��ɔ���Ƃ��Ďg���܂��B</P>
-<P>�@�@�@�@N�AZ�AC�AV�t���O�̓R���f�B�V�����R�[�h�ɕۑ�����܂��B�R���f�B�V�����R�[�h�Ƃ͉��Z�̌��ʂɂ��ω����A���̌�̖��߂����s���邩�ۂ������肷��</P>
-<P>�@�@�@�@�̂Ɏg�p����܂��BThumb���߂ł���̉e�����󂯂�̂�<A 
-href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Branch">Branch����</A>�����ł��B</P>
-<P>�@�@�@�@I�AF�AT�t���O�ɂ��Ă̓v���O�����������x���ň����t���O�ł͂���܂���B���Ȃ݂�T��Thumb�@State���ɂ͂�����1�iON�j�ɂȂ��Ă܂��B</P>
+<P>補足：条件フラグとはALU演算の結果でCPSR（カレントステータスレジスタの）にON（1）、OFF（0）にされるもののことです。条件命令の時に判定として使われます。</P>
+<P>　　　　N、Z、C、Vフラグはコンディションコードに保存されます。コンディションコードとは演算の結果により変化し、その後の命令を実行するか否かを決定する</P>
+<P>　　　　のに使用されます。Thumb命令でこれの影響を受けるのは<A 
+href="http://f16.aaa.livedoor.jp/~sinzan/cheat/arm/#Branch">Branch命令</A>だけです。</P>
+<P>　　　　I、F、Tフラグについてはプログラム改造レベルで扱うフラグではありません。ちなみにTはThumb　State時にはずっと1（ON）になってます。</P>
 <HR>
 
-<P class=border>�@�@�@�@ <A name=ALU></A>�����t���O�Z�b�g���閽��</P>
-<P>�����̖��߂�R0�`R7���W�X�^�Ԃ�ALU���Z�i���Z���ʂɂ����CPSR�ɏ����t���O���Z�b�g���閽�߁j���s�����߂ł��B</P>
+<P class=border>　　　　 <A name=ALU></A>条件フラグセットする命令</P>
+<P>これらの命令はR0～R7レジスタ間でALU演算（演算結果によってCPSRに条件フラグをセットする命令）を行う命令です。</P>
 <TABLE border=1 width="17%">
   <TBODY>
   <TR>
     <TD height=19 width="33%">
       <DIV align=left>AND</DIV></TD>
-    <TD width="67%">�_����</TD></TR>
+    <TD width="67%">論理積</TD></TR>
   <TR>
     <TD height=19>EOR</TD>
-    <TD>�r���I�_���a</TD></TR>
+    <TD>排他的論理和</TD></TR>
   <TR>
     <TD height=19>LSL</TD>
-    <TD>�_�����V�t�g</TD></TR>
+    <TD>論理左シフト</TD></TR>
   <TR>
     <TD height=19>LSR</TD>
-    <TD>�_���E�V�t�g</TD></TR>
+    <TD>論理右シフト</TD></TR>
   <TR>
     <TD height=19>ASR</TD>
-    <TD>�Z�p�E�V�t�g</TD></TR>
+    <TD>算術右シフト</TD></TR>
   <TR>
     <TD height=19>ADC</TD>
-    <TD>�L�����[�t�����Z</TD></TR>
+    <TD>キャリー付き加算</TD></TR>
   <TR>
     <TD height=19>SBC</TD>
-    <TD>�L�����[�t�����Z</TD></TR>
+    <TD>キャリー付き減算</TD></TR>
   <TR>
     <TD height=19>ROR</TD>
-    <TD>�E���[�e�C�g</TD></TR>
+    <TD>右ローテイト</TD></TR>
   <TR>
     <TD height=19>TST</TD>
-    <TD>�r�b�g�e�X�g</TD></TR>
+    <TD>ビットテスト</TD></TR>
   <TR>
     <TD height=19>NEG</TD>
-    <TD>�������]</TD></TR>
+    <TD>符号反転</TD></TR>
   <TR>
     <TD height=19>CMP</TD>
-    <TD>��r</TD></TR>
+    <TD>比較</TD></TR>
   <TR>
     <TD height=19>CMN</TD>
-    <TD>�t��r</TD></TR>
+    <TD>逆比較</TD></TR>
   <TR>
     <TD height=19>ORR</TD>
-    <TD>�_���a</TD></TR>
+    <TD>論理和</TD></TR>
   <TR>
     <TD height=19>MUL</TD>
-    <TD>�ώZ</TD></TR>
+    <TD>積算</TD></TR>
   <TR>
     <TD height=19>BIC</TD>
-    <TD>�r�b�g�N���A</TD></TR>
+    <TD>ビットクリア</TD></TR>
   <TR>
     <TD height=19>MVN</TD>
-    <TD>�r�b�g���]</TD></TR></TBODY></TABLE>
-<P>���̑�</P>
+    <TD>ビット反転</TD></TR></TBODY></TABLE>
+<P>その他</P>
 <TABLE border=1 width="17%">
   <TBODY>
   <TR>
     <TD height=19 width="33%">
       <DIV align=left>ADD</DIV></TD>
-    <TD width="67%">���Z</TD></TR>
+    <TD width="67%">加算</TD></TR>
   <TR>
     <TD height=19>SUB</TD>
-    <TD>���Z</TD></TR></TBODY></TABLE>
-<P>�⑫�F�����̉��Z�͌��ʂ�CPSR�i�J�����g�X�e�[�^�X���W�X�^�j�̏����t���O�ɃZ�b�g���܂��B</P>
-<P>�@�@�@ ���߂̏ڂ����t�H�[�}�b�g�͉��ɋL�q���Ă���܂��B</P>
+    <TD>減算</TD></TR></TBODY></TABLE>
+<P>補足：これらの演算は結果をCPSR（カレントステータスレジスタ）の条件フラグにセットします。</P>
+<P>　　　 命令の詳しいフォーマットは下に記述してあります。</P>
 <HR>
 
-<P class=border><A id=S_R name=S_R></A>�V�t�g���߁iShift/Rotate�j</P>
+<P class=border><A id=S_R name=S_R></A>シフト命令（Shift/Rotate）</P>
 <TABLE border=1 width="53%">
   <TBODY>
   <TR>
     <TD height=19 width="26%">
       <DIV align=left>LSL Rd,Rs,#Offset5</DIV></TD>
-    <TD width="74%">Rs��5�r�b�g���ŕ\�����l�����_�����V�t�g��Rd�Ɋi�[</TD></TR>
+    <TD width="74%">Rsを5ビット長で表される値だけ論理左シフトしRdに格納</TD></TR>
   <TR>
     <TD>
       <DIV align=left>LSL Rd,Rs</DIV></TD>
-    <TD>Rd��Rs�̒l�̕������_�����V�t�g</TD></TR>
+    <TD>RdをRsの値の分だけ論理左シフト</TD></TR>
   <TR>
     <TD>
       <DIV align=left>LSR Rd,Rs,#Offset5</DIV></TD>
-    <TD>Rs��5�r�b�g���ŕ\�����l�����_���E�V�t�g��Rd�Ɋi�[</TD></TR>
+    <TD>Rsを5ビット長で表される値だけ論理右シフトしRdに格納</TD></TR>
   <TR>
     <TD>LSR Rd,Rs</TD>
-    <TD>Rd��Rs�̒l�̕������_���E�V�t�g</TD></TR>
+    <TD>RdをRsの値の分だけ論理右シフト</TD></TR>
   <TR>
     <TD>ASR Rd,Rs,#Offset5</TD>
-    <TD>Rs��5�r�b�g���ŕ\�����l�����Z�p�E�V�t�g��Rd�Ɋi�[</TD></TR>
+    <TD>Rsを5ビット長で表される値だけ算術右シフトしRdに格納</TD></TR>
   <TR>
     <TD>ASR Rd,Rs</TD>
-    <TD>Rd��Rs�̒l�̕������Z�p�E�V�t�g</TD></TR>
+    <TD>RdをRsの値の分だけ算術右シフト</TD></TR>
   <TR>
     <TD>ROR Rd,Rs</TD>
-    <TD>Rd��Rs�̒l�̕������E���[�e�C�g</TD></TR></TBODY></TABLE>
-<P>��FLSL R0,R1,#1</P>
-<P>�Ӗ��FR1�̓��e��1bit���ɘ_���V�t�g�A���̌��ʂ�R0�ɑ���B</P>
-<P>�⑫�F���Ɂ�bit�V�t�g���邱�Ƃɂ�茳�̒l��2�́��悳��Ă����B�E�̏ꍇ��2��-����B</P>
-<P>�@�@�@�@�悭����o���ln�{�A1/n�{���͂��̃V�t�g���߂�p���č����B</P>
+    <TD>RdをRsの値の分だけ右ローテイト</TD></TR></TBODY></TABLE>
+<P>例：LSL R0,R1,#1</P>
+<P>意味：R1の内容を1bit左に論理シフト、その結果をR0に代入。</P>
+<P>補足：左に○bitシフトすることにより元の値が2の○乗されていく。右の場合は2の-○乗。</P>
+<P>　　　　よくある経験値n倍、1/n倍等はこのシフト命令を用いて作られる。</P>
 <HR>
 </DIV>
-<P class=border align=left><A name=Add></A>���Z���߁iAdd�j</P>
+<P class=border align=left><A name=Add></A>加算命令（Add）</P>
 <DIV align=left>
 <TABLE border=1 width="59%">
   <TBODY>
   <TR>
     <TD height=19 width="22%">
       <DIV align=left>ADD Rd,Rs,Rn</DIV></TD>
-    <TD width="78%">Rs��Rn�����Z��Rd�Ɋi�[</TD></TR>
+    <TD width="78%">RsとRnを加算しRdに格納</TD></TR>
   <TR>
     <TD>
       <DIV align=left>ADD Rd,Rs,#Offset3</DIV></TD>
-    <TD>Rs��3�r�b�g���ŕ\�����l�����Z��Rd�Ɋi�[</TD></TR>
+    <TD>Rsと3ビット長で表される値を加算しRdに格納</TD></TR>
   <TR>
     <TD>ADD Rd,#Offset8</TD>
-    <TD>Rd��8�r�b�g���ŕ\�����l�����Z��Rd�Ɋi�[</TD></TR>
+    <TD>Rdに8ビット長で表される値を加算しRdに格納</TD></TR>
   <TR>
     <TD>ADD Rd,SP,#imm</TD>
-    <TD>SP��#imm�𑫂����A�h���X��Rd�Ƀ��[�h</TD></TR>
+    <TD>SPに#immを足したアドレスをRdにロード</TD></TR>
   <TR>
     <TD height=19>ADD Rd,PC,#imm</TD>
-    <TD>PC��#imm�𑫂����A�h���X��Rd�Ƀ��[�h</TD></TR>
+    <TD>PCに#immを足したアドレスをRdにロード</TD></TR>
   <TR>
-    <TD>ADD SP,#�}imm</TD>
-    <TD>SP�Ɂ}#imm�i�}508�܂Łj�����Z�B�A���I�t�Z�b�g�͉���2bit��0�ł��邱�Ƃ�����</TD></TR>
+    <TD>ADD SP,#±imm</TD>
+    <TD>SPに±#imm（±508まで）を加算。但しオフセットは下位2bitが0であることが条件</TD></TR>
   <TR>
     <TD>ADC Rd,Rs</TD>
-    <TD>Rs��Rd���L�����[�t�����Z</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FADD R0,R1,#99</P>
-<P align=left>�Ӗ��FR0 = R1 + 99</P>
-<P align=left>�⑫�F[ADD Rd,SP,#imm]��[ADD 
-Rd,PC,#imm]�͉��Z�ƌ������SP�APC�����Z���ē���ꂽ�A�h���X�����[�h���閽�߂ł��B</P>
-<P align=left>�@�@�@�@ADD���߂�R8�`R15�̏�ʃ��W�X�^���g�p���邱�Ƃ��\�ł��B</P>
+    <TD>RsとRdをキャリー付き加算</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：ADD R0,R1,#99</P>
+<P align=left>意味：R0 = R1 + 99</P>
+<P align=left>補足：[ADD Rd,SP,#imm]と[ADD 
+Rd,PC,#imm]は加算と言うよりSP、PCを加算して得られたアドレスをロードする命令です。</P>
+<P align=left>　　　　ADD命令はR8～R15の上位レジスタも使用することが可能です。</P>
 <HR>
 
 <DIV align=left></DIV>
-<P class=border align=left><A name=Sub></A>���Z���߁iSubtract�j</P>
+<P class=border align=left><A name=Sub></A>減算命令（Subtract）</P>
 <DIV align=left>
 <TABLE border=1 width="47%">
   <TBODY>
   <TR>
     <TD height=19 width="27%">
       <DIV align=left>SUB Rd,Rs,Rn</DIV></TD>
-    <TD width="73%">Rs����Rn�����Z��Rd�Ɋi�[</TD></TR>
+    <TD width="73%">RsからRnを減算しRdに格納</TD></TR>
   <TR>
     <TD>
       <DIV align=left>SUB Rd,Rs,#Offset3</DIV></TD>
-    <TD>Rs����3�r�b�g���ŕ\�����l�����Z��Rd�Ɋi�[</TD></TR>
+    <TD>Rsから3ビット長で表される値を減算しRdに格納</TD></TR>
   <TR>
     <TD>SUB Rd,#Offset8</TD>
-    <TD>Rd����8�r�b�g���ŕ\�����l�����Z��Rd�Ɋi�[</TD></TR>
+    <TD>Rdから8ビット長で表される値を減算しRdに格納</TD></TR>
   <TR>
     <TD>SBC Rd,Rs</TD>
-    <TD>Rs����Rd�� NOT �L�����[�t�����Z</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FSUB R0,$0x63</P>
-<P align=left>�Ӗ��FR0 = R0 - 99</P>
-<P align=left>�⑫�F���𔃂��Ă���������Ȃ����͂��̌��Z���߂�ׂ����Ƃɂ��\�B�t�ɂ��������铙�͉��Z���߂ɏ��������邱�Ƃ�</P>
-<P align=left>�@�@�@�@�\�ɂȂ�B</P>
+    <TD>RsからRdを NOT キャリー付き減算</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：SUB R0,$0x63</P>
+<P align=left>意味：R0 = R0 - 99</P>
+<P align=left>補足：物を買ってもお金減らない等はこの減算命令を潰すことにより可能。逆にお金増える等は加算命令に書き換えることで</P>
+<P align=left>　　　　可能になる。</P>
 <HR>
 
 <DIV align=left></DIV>
-<P class=border align=left><A name=Cmp></A>��r���߁iCompare�j</P>
+<P class=border align=left><A name=Cmp></A>比較命令（Compare）</P>
 <DIV align=left>
 <TABLE border=1 width="44%">
   <TBODY>
   <TR>
     <TD height=19 width="27%">CMP Rd,Rs</TD>
-    <TD width="73%">Rd�̓��e��Rs�̓��e���r</TD></TR>
+    <TD width="73%">Rdの内容とRsの内容を比較</TD></TR>
   <TR>
     <TD>CMP Rd,#Offset8</TD>
-    <TD>Rd�̓��e��8�r�b�g���ŕ\�����l���r</TD></TR>
+    <TD>Rdの内容を8ビット長で表される値を比較</TD></TR>
   <TR>
     <TD>CMN Rd,Rs</TD>
-    <TD>Rd�̓��e��Rs�̓��e���r�i�t��r�j</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FCMP Rd,$0x98967F</P>
-<P align=left>�Ӗ��FRd - 9999999</P>
-<P align=left>�⑫�FCMP��SUB�Ƃ܂�����������������邪�A�Ⴂ�͉��Z���ʂ����W�X�^�ɔ��f����Ȃ��_�B���ʂ݂̂������t���O�ɔ��f�����B</P>
-<P>�@�@�@ CMN��CMP�Ƌt��ADD�Ɠ�������������B</P>
+    <TD>Rdの内容とRsの内容を比較（逆比較）</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：CMP Rd,$0x98967F</P>
+<P align=left>意味：Rd - 9999999</P>
+<P align=left>補足：CMPはSUBとまったく同じ動作をするが、違いは演算結果がレジスタに反映されない点。結果のみが条件フラグに反映される。</P>
+<P>　　　 CMNはCMPと逆でADDと同じ働きをする。</P>
 <HR>
 
-<P class=border align=left><A name=Logical></A>�_�����Z�iLogical�j</P>
+<P class=border align=left><A name=Logical></A>論理演算（Logical）</P>
 <DIV align=left>
 <TABLE border=1 width="50%">
   <TBODY>
   <TR>
     <TD height=19 width="18%">AND Rd,Rs</TD>
-    <TD width="82%">Rd��Rs�Ř_����</TD></TR>
+    <TD width="82%">RdをRsで論理積</TD></TR>
   <TR>
     <TD height=19>ORR Rd,Rs</TD>
-    <TD>Rd��Rs�Ř_���a</TD></TR>
+    <TD>RdをRsで論理和</TD></TR>
   <TR>
     <TD height=19>EOR Rd,Rs</TD>
-    <TD>Rd��Rs�Ŕr���I�_���a</TD></TR>
+    <TD>RdをRsで排他的論理和</TD></TR>
   <TR>
     <TD height=19>BIC Rd,Rs</TD>
-    <TD>Rd��NOT Rs�Ř_���a����</TD></TR>
+    <TD>RdをNOT Rsで論理和する</TD></TR>
   <TR>
     <TD height=19>MVN Rd,Rs</TD>
-    <TD>Rd��NOT Rs�����l���i�[</TD></TR>
+    <TD>RdにNOT Rsした値を格納</TD></TR>
   <TR>
     <TD height=19>TST Rd,Rd</TD>
-    <TD>Rd��Rs�Ř_���ρi�������A��r���߂Ɠ����Ń��W�X�^�ɔ��f���Ȃ��j</TD></TR></TBODY></TABLE></DIV>
-<P align=left>���܂�ǂ��Ⴊ�v�����܂��񂪁E�E�E���W�X�^�������������{�I�Ȗ���</P>
-<P align=left>��FEOR R0,R0</P>
-<P align=left>�Ӗ��FR0 = R0 EOR R0</P>
+    <TD>RdをRsで論理積（ただし、比較命令と同じでレジスタに反映しない）</TD></TR></TBODY></TABLE></DIV>
+<P align=left>あまり良い例が思いつきませんが・・・レジスタを初期化する基本的な命令</P>
+<P align=left>例：EOR R0,R0</P>
+<P align=left>意味：R0 = R0 EOR R0</P>
 <P align=left>&nbsp;</P>
-<P align=left>�r���I�_���a�̗�FX�i=11111111�j��Y�i=11110000�j�Ƃ��܂��B</P>
-<P align=left>�@�@�@�@11111111</P>
-<P align=left><U>EOR�@ 
-11110000</U>�@;X��Y�̒l���Ⴄ�ꍇ�͐^�A�����ꍇ�͋U�Ƃ�����������܂��B�r���Ƃ͑��Ɠ����ɂȂ�Ȃ��Ƃ����Ӗ��ł��B</P>
-<P align=left>�@�@�@�@00001111�@;�_�����ŏ����ƁE�E�ENOT�iX�j�EY+X�ENOT�iY�j�B�x���}�͏ȗ��i���j�B</P>
-<P align=left>�@�@�@�@�@�@�@�@�@�@�@;���4bit�i1111+1111�j�͓��͂���鐔���Ƃ���1�œ������Ƃ���U�ƂȂ�0�ɂȂ�܂��B</P>
-<P align=left>�@�@�@�@�@�@�@�@�@�@�@;����4bit�i1111+0000�j�͓��͂���鐔��1��0�ňႤ�̂Ő^�ƂȂ�1�ɂȂ�܂��B</P>
-<P align=left>�@�@�@�@�@�@�@�@�@�@�@;�P���Ȑ��ł̔r���I�_���a�����Ă݂܂������A���G�Ȑ����Ƃǂ��Ȃ邩�����낢��e�X�g���Ă݂��</P>
-<P align=left>�@�@�@�@�@�@�@�@�@�@�@;�������[�܂邩�Ǝv���܂��B�e�X�g�ɂ�WINDOWS�t���̊֐��d��ŏ\���ł��܂��B</P>
+<P align=left>排他的論理和の例：X（=11111111）とY（=11110000）とします。</P>
+<P align=left>　　　　11111111</P>
+<P align=left><U>EOR　 
+11110000</U>　;XとYの値が違う場合は真、同じ場合は偽という動作をします。排他とは他と同じにならないという意味です。</P>
+<P align=left>　　　　00001111　;論理式で書くと・・・NOT（X）・Y+X・NOT（Y）。ベン図は省略（爆）。</P>
+<P align=left>　　　　　　　　　　　;上位4bit（1111+1111）は入力される数がともに1で同じことから偽となり0になります。</P>
+<P align=left>　　　　　　　　　　　;下位4bit（1111+0000）は入力される数が1と0で違うので真となり1になります。</P>
+<P align=left>　　　　　　　　　　　;単純な数での排他的論理和をしてみましたが、複雑な数だとどうなるか等いろいろテストしてみると</P>
+<P align=left>　　　　　　　　　　　;理解が深まるかと思います。テストにはWINDOWS付属の関数電卓で十分できます。</P>
 <P align=left>&nbsp;</P>
 <P align=left>&nbsp;</P>
-<P align=left>�⑫�FR0��R0�Ŕr���I�_���a���邱�Ƃɂ��0�ɂ��邱�Ƃ��ł���Bx86�n[XOR 
-EAX,EAX]���ł̓������̎g�p�ʂ�2Byte�ō�</P>
-<P align=left>�@�@�@�@�ނ���[MOV 
-EAX,0]��4Byte��菭�Ȃ��������̎g�p�ʂŎ��s�ł���A�������Ȃ��Ƃ��珉�����Ƃ��Ďg���邱�Ƃ���</P>
+<P align=left>補足：R0をR0で排他的論理和することにより0にすることができる。x86系[XOR 
+EAX,EAX]等ではメモリの使用量が2Byteで済</P>
+<P align=left>　　　　むため[MOV 
+EAX,0]の4Byteより少ないメモリの使用量で実行できる、かつ高速なことから初期化として使われることが多</P>
 <P 
-align=left>�@�@�@�@����ARM�n�ł͖��ߒ���ARM�i4Byte�j�AThumb�i2Byte�j�ɌŒ肳��Ă��邽�߃T�C�N���̈Ⴂ�͂���ǂ��܂�Ӗ����Ȃ��Ǝv����E�E�E�i���j�B</P>
+align=left>　　　　いがARM系では命令長がARM（4Byte）、Thumb（2Byte）に固定されているためサイクルの違いはあれどあまり意味がないと思われる・・・（汗）。</P>
 <HR>
 
-<P class=border><A name=Mov></A>�i�[���߁iMove�j</P>
+<P class=border><A name=Mov></A>格納命令（Move）</P>
 <DIV align=left>
 <TABLE border=1 width="42%">
   <TBODY>
   <TR>
     <TD height=19 width="29%">MOV Rd,Rs</TD>
-    <TD width="71%">Rd��Rs�̒l���i�[</TD></TR>
+    <TD width="71%">RdにRsの値を格納</TD></TR>
   <TR>
     <TD height=19>MOV Rd,#Offset8</TD>
-    <TD>8�r�b�g���ŕ\�����l��Rd�Ɋi�[</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FMOV R0,$0x63</P>
-<P align=left>�Ӗ��FR0 = 99</P>
-<P align=left>�⑫�FMOV���߂�R8�`R15�̏�ʃ��W�X�^���g�p���邱�Ƃ��\�ł��B</P>
+    <TD>8ビット長で表される値をRdに格納</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：MOV R0,$0x63</P>
+<P align=left>意味：R0 = 99</P>
+<P align=left>補足：MOV命令はR8～R15の上位レジスタも使用することが可能です。</P>
 <HR>
 
-<P class=border><A name=Mul></A>�ώZ���߁iMultiply�j</P>
+<P class=border><A name=Mul></A>積算命令（Multiply）</P>
 <DIV align=left>
 <TABLE border=1 width="23%">
   <TBODY>
   <TR>
     <TD height=19 width="37%">MUL Rd,Rs</TD>
-    <TD width="63%">Rd��Rs�̒l�ŐώZ</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FMUL R0,R1</P>
-<P>�Ӗ��FR0 = R0 * R1</P>
+    <TD width="63%">RdをRsの値で積算</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：MUL R0,R1</P>
+<P>意味：R0 = R0 * R1</P>
 <HR>
 
-<P class=border><A name=Neg></A>�������]���߁iNegate�j</P>
+<P class=border><A name=Neg></A>符号反転命令（Negate）</P>
 <DIV align=left>
 <TABLE border=1 width="30%">
   <TBODY>
   <TR>
     <TD height=19 width="27%">NEG Rd,Rs </TD>
-    <TD width="73%">Rd��Rs�̕������]�����l������</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FNEG Rd,Rs</P>
-<P>�Ӗ��FR0 = -R1</P>
-<P>�⑫�F���̒l�����̏ꍇ�́A���]���Đ��ɂȂ�܂��B</P>
+    <TD width="73%">RdにRsの符号反転した値を入れる</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：NEG Rd,Rs</P>
+<P>意味：R0 = -R1</P>
+<P>補足：元の値が負の場合は、反転して正になります。</P>
 <HR>
 
-<P class=border><A name=Str></A>�������݁i�X�g�A�j���߁iStore�j</P>
+<P class=border><A name=Str></A>書き込み（ストア）命令（Store）</P>
 <DIV align=left>
 <TABLE border=1 width="64%">
   <TBODY>
   <TR>
     <TD height=19 width="20%">STR Rd,[Rs,Rn]</TD>
-    <TD width="80%">Rs��Rn�𑫂����������A�h���X��Rd�����[�h�X�g�A�i4Byte�j</TD></TR>
+    <TD width="80%">RsとRnを足したメモリアドレスにRdをワードストア（4Byte）</TD></TR>
   <TR>
     <TD height=19>STRH Rd,[Rs,Rn]</TD>
-    <TD>Rs��Rn�𑫂����������A�h���X��Rd���n�[�t���[�h�X�g�A�i2Byte�j</TD></TR>
+    <TD>RsとRnを足したメモリアドレスにRdをハーフワードストア（2Byte）</TD></TR>
   <TR>
     <TD height=19>STRB Rd,[Rs,Rn]</TD>
-    <TD>Rs��Rn�𑫂����������A�h���X��Rd���o�C�g�X�g�A�i1Byte�j</TD></TR>
+    <TD>RsとRnを足したメモリアドレスにRdをバイトストア（1Byte）</TD></TR>
   <TR>
     <TD height=19>STR Rd,[Rs,#imm]</TD>
-    <TD>Rs�ɕ�������#imm�i7bit = 124�܂Łj�𑫂����������A�h���X��Rd�����[�h�X�g�A</TD></TR>
+    <TD>Rsに符号無し#imm（7bit = 124まで）を足したメモリアドレスにRdをワードストア</TD></TR>
   <TR>
     <TD height=19>STRH Rd,[Rs,#imm]</TD>
-    <TD>Rs�ɕ�������#imm�i6bit = 62�܂Łj�𑫂����������A�h���X��Rd���n�[�t���[�h�X�g�A</TD></TR>
+    <TD>Rsに符号無し#imm（6bit = 62まで）を足したメモリアドレスにRdをハーフワードストア</TD></TR>
   <TR>
     <TD height=19>STRB Rd,[Rs,#imm]</TD>
-    <TD>Rs�ɕ�������#imm�i5bit = 31�܂Łj�𑫂����������A�h���X��Rd���o�C�g�X�g�A</TD></TR>
+    <TD>Rsに符号無し#imm（5bit = 31まで）を足したメモリアドレスにRdをバイトストア</TD></TR>
   <TR>
     <TD height=19>STR Rd,[SP,#imm]</TD>
-    <TD>SP�ɕ�������#imm�i�ő�1020�o�C�g�j�� �������������A�h���X��Rd�����[�h�X�g�A</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FSTRB R0,[R1,#20]</P>
-<P>�Ӗ��F[R1 + $0x14] = R0</P>
-<P>�⑫�F#imm�̒l�͖��߂̏������ޒ����ɍ��킹�Ă��������BSTR��������4�o�C�g���i10�i����4,8,12,16�c)�ASTRH��2�o�C�g����(10�i����2,4,6,8���)�B</P>
+    <TD>SPに符号無し#imm（最大1020バイト）を 足したメモリアドレスにRdをワードストア</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：STRB R0,[R1,#20]</P>
+<P>意味：[R1 + $0x14] = R0</P>
+<P>補足：#immの値は命令の書き込む長さに合わせてください。STRだったら4バイトずつ（10進だと4,8,12,16…)、STRHは2バイトずつ(10進だと2,4,6,8･･･)。</P>
 <HR>
 
-<P class=border><A name=Ldr></A>�ǂݍ��݁i���[�h�j���߁iLoad�j</P>
+<P class=border><A name=Ldr></A>読み込み（ロード）命令（Load）</P>
 <DIV align=left>
 <TABLE border=1 width="75%">
   <TBODY>
   <TR>
     <TD height=19 width="17%">LDR Rd,[Rs,Rn]</TD>
-    <TD width="83%">Rs��Rn�𑫂����������A�h���X�̒l��Rd�Ƀ��[�h���[�h�i4Byte�j</TD></TR>
+    <TD width="83%">RsとRnを足したメモリアドレスの値をRdにワードロード（4Byte）</TD></TR>
   <TR>
     <TD height=19>LDRH Rd,[Rs,Rn]</TD>
-    <TD>Rs��Rn�𑫂����������A�h���X�̒l��Rd�Ƀn�[�t���[�h���[�h�i2Byte�j</TD></TR>
+    <TD>RsとRnを足したメモリアドレスの値をRdにハーフワードロード（2Byte）</TD></TR>
   <TR>
     <TD height=19>LDRB Rd,[Rs,Rn]</TD>
-    <TD>Rs��Rn�𑫂����������A�h���X�̒l��Rd�Ƀo�C�g���[�h�i1Byte�j</TD></TR>
+    <TD>RsとRnを足したメモリアドレスの値をRdにバイトロード（1Byte）</TD></TR>
   <TR>
     <TD height=19>LDR Rd,[Rs,#imm]</TD>
-    <TD>Rs�ɕ�������#imm�i7bit = 124�܂Łj�𑫂����������A�h���X�̒l��Rd�Ƀ��[�h���[�h</TD></TR>
+    <TD>Rsに符号無し#imm（7bit = 124まで）を足したメモリアドレスの値をRdにワードロード</TD></TR>
   <TR>
     <TD height=19>LDRH Rd,[Rs,#imm]</TD>
-    <TD>Rs�ɕ�������#imm�i6bit = 62�܂Łj�𑫂����������A�h���X�̒l��Rd�Ƀn�[�t���[�h���[�h</TD></TR>
+    <TD>Rsに符号無し#imm（6bit = 62まで）を足したメモリアドレスの値をRdにハーフワードロード</TD></TR>
   <TR>
     <TD height=19>LDRB Rd,[Rs,#imm]</TD>
-    <TD>Rs�ɕ�������#imm�i5bit = 31�܂Łj�𑫂����������A�h���X�̒l��Rd�Ƀo�C�g���[�h</TD></TR>
+    <TD>Rsに符号無し#imm（5bit = 31まで）を足したメモリアドレスの値をRdにバイトロード</TD></TR>
   <TR>
     <TD height=19>LDSH Rd,[Rs,Rn]</TD>
-    <TD>Rs��Rn�𑫂����������A�h���X�̒l��Rd�Ƀn�[�t���[�h���[�h�A Rd�̏��16bit�ɂ�15bit�ڂ̒l���R�s�[�����</TD></TR>
+    <TD>RsにRnを足したメモリアドレスの値をRdにハーフワードロード、 Rdの上位16bitには15bit目の値がコピーされる</TD></TR>
   <TR>
     <TD height=19>LDSB Rd,[Rs,Rn]</TD>
-    <TD>Rs��Rn�𑫂����������A�h���X�̒l��Rd�Ƀo�C�g���[�h�A Rd�̏��24bit�ɂ�7bit�ڂ̒l���R�s�[�����</TD></TR>
+    <TD>RsにRnを足したメモリアドレスの値をRdにバイトロード、 Rdの上位24bitには7bit目の値がコピーされる</TD></TR>
   <TR>
     <TD height=19>LDR Rd,[SP,#imm]</TD>
-    <TD>SP�ɕ�������#imm�i1020�o�C�g�܂Łj�𑫂����������A�h���X�̒l��Rd�����[�h���[�h</TD></TR>
+    <TD>SPに符号無し#imm（1020バイトまで）を足したメモリアドレスの値にRdをワードロード</TD></TR>
   <TR>
     <TD height=19>LDR Rd,[PC,#imm]</TD>
-    <TD>PC�ɕ�������#imm�i1020�o�C�g�܂Łj�𑫂����������A�h���X�̒l��Rd�Ƀ��[�h���[�h</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FLDRB R0,[R1,#20]</P>
-<P>�Ӗ��FR0 = [R1 + $0x14]</P>
-<P>�⑫�F�X�g�A�Ɠ�����#imm�̒l�̐ݒ�ɂ͋C�����Ă��������B</P>
+    <TD>PCに符号無し#imm（1020バイトまで）を足したメモリアドレスの値をRdにワードロード</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：LDRB R0,[R1,#20]</P>
+<P>意味：R0 = [R1 + $0x14]</P>
+<P>補足：ストアと同じく#immの値の設定には気をつけてください。</P>
 <HR>
 
-<P class=border><A name=P_P></A>PUSH/POP����</P>
+<P class=border><A name=P_P></A>PUSH/POP命令</P>
 <DIV align=left>
 <TABLE border=1 width="68%">
   <TBODY>
   <TR>
     <TD height=19 width="16%">PUSH {Rlist}</TD>
-    <TD width="84%">���W�X�^���X�gRlist�ɂ��郌�W�X�^���X�^�b�N��PUSH���A �X�^�b�N�|�C���^���X�V����</TD></TR>
+    <TD width="84%">レジスタリストRlistにあるレジスタをスタックにPUSHし、 スタックポインタを更新する</TD></TR>
   <TR>
     <TD height=19>PUSH {Rlist,LR}</TD>
-    <TD>���W�X�^���X�gRlist�ɂ��郌�W�X�^�ƃ����N���W�X�^�� �X�^�b�N��PUSH���A�X�^�b�N�|�C���^���X�V����</TD></TR>
+    <TD>レジスタリストRlistにあるレジスタとリンクレジスタを スタックにPUSHし、スタックポインタを更新する</TD></TR>
   <TR>
     <TD height=19>POP {Rlist}</TD>
-    <TD>�X�^�b�N���烌�W�X�^���X�gRlist�ɂ��郌�W�X�^��POP���A �X�^�b�N�|�C���^���X�V����</TD></TR>
+    <TD>スタックからレジスタリストRlistにあるレジスタをPOPし、 スタックポインタを更新する</TD></TR>
   <TR>
     <TD height=19>POP {Rlist,PC}</TD>
-    <TD>�X�^�b�N���烌�W�X�^���X�gRlist�ɂ��郌�W�X�^��PC�� 
-POP���A�X�^�b�N�|�C���^���X�V����D</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FPUSH {R0-R7,LR}</P>
-<P align=left>�Ӗ��FR0�`R7�A�����N���W�X�^���X�^�b�N�Ɉꎞ�ۑ����A�X�^�b�N�|�C���^���X�V�B</P>
-<P align=left>�⑫�F��L�̗�̓T�u���[�`���̎�O�Ŏ��s����ƃ��^�[���A�h���X�Ƃ��̎��̃��W�X�^�̏�Ԃ�ۑ��ł���</P>
+    <TD>スタックからレジスタリストRlistにあるレジスタとPCを 
+POPし、スタックポインタを更新する．</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：PUSH {R0-R7,LR}</P>
+<P align=left>意味：R0～R7、リンクレジスタをスタックに一時保存し、スタックポインタを更新。</P>
+<P align=left>補足：上記の例はサブルーチンの手前で実行するとリターンアドレスとその時のレジスタの状態を保存できる</P>
 <HR>
 
-<P class=border><A name=Stm_Ldm></A>�����̃��W�X�^�̃��[�h�A�X�g�A</P>
+<P class=border><A name=Stm_Ldm></A>複数のレジスタのロード、ストア</P>
 <DIV align=left>
 <TABLE border=1 width="75%">
   <TBODY>
   <TR>
     <TD height=19 width="15%">STMIA Rd!,{Rlist}</TD>
     <TD 
-    width="85%">���W�X�^���X�gRlist�ɂ��郌�W�X�^���A�x�[�X���W�X�^Rd�Ŏ�����郁�����A�h���X�Ƀ��[�h�X�g�A���ARd���X�V����</TD></TR>
+    width="85%">レジスタリストRlistにあるレジスタを、ベースレジスタRdで示されるメモリアドレスにワードストアし、Rdを更新する</TD></TR>
   <TR>
     <TD height=19>LDMIA Rd!,{Rlist}</TD>
-    <TD>�x�[�X���W�X�^Rd�Ŏ�����郁�����A�h���X���� ���W�X�^���X�gRlist�ɂ��郌�W�X�^�����[�h���[�h���A 
-  Rd���X�V����</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FSTMIA R0!,{R1-R7}</P>
-<P>�Ӗ��FR1�`R7��R0�Ŏ�����郁�����A�h���X�ɁAR0�����ɃC���N�������g���Ȃ��烏�[�h�X�g�A��1�񂲂Ƃ�R0�ɂ̓C���N�������g�����l�������߂����</P>
-<P>�ʉ��F��̗�͂��̂悤�ȓ����1���ߕ��ōs���܂��B</P>
-<P>�@�@�@STR R1,[R0]</P>
-<P>�@�@�@ADD R0,#4</P>
-<P>�@�@�@STR R2,[R0]</P>
-<P>�@�@�@ADD R0,#4</P>
-<P>�@�@�@�@�@�@�E</P>
-<P>�@�@�@�@�@�@�E</P>
-<P>�@�@�@�@�@�@�E</P>
-<P>�@�@�@STR R7,[R0]</P>
-<P>�@�@�@ADD R0,#4</P>
+    <TD>ベースレジスタRdで示されるメモリアドレスから レジスタリストRlistにあるレジスタをワードロードし、 
+  Rdを更新する</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：STMIA R0!,{R1-R7}</P>
+<P>意味：R1～R7をR0で示されるメモリアドレスに、R0を順にインクリメントしながらワードストアし1回ごとにR0にはインクリメントした値が書き戻される</P>
+<P>別解：上の例はこのような動作を1命令分で行います。</P>
+<P>　　　STR R1,[R0]</P>
+<P>　　　ADD R0,#4</P>
+<P>　　　STR R2,[R0]</P>
+<P>　　　ADD R0,#4</P>
+<P>　　　　　　・</P>
+<P>　　　　　　・</P>
+<P>　　　　　　・</P>
+<P>　　　STR R7,[R0]</P>
+<P>　　　ADD R0,#4</P>
 <P>&nbsp;</P>
-<P>��FLDMIA R0!,{R1-R7}</P>
-<P>�Ӗ��FR1�`R7��R0�Ŏ�����郁�����A�h���X����R0�����ɃC���N�������g���Ȃ��烏�[�h���[�h��1�񂲂Ƃ�R0�ɂ̓C���N�������g�����l�������߂����</P>
-<P>�ʉ��F��̗�͂��̂悤�ȓ����1���ߕ��ōs���܂��B</P>
-<P>�@�@�@LDR R1,[R0]</P>
-<P>�@�@�@ADD R0,#4</P>
-<P>�@�@�@LDR R2,[R0]</P>
-<P>�@�@�@ADD R0,#4</P>
-<P>�@�@�@�@�@�@�E</P>
-<P>�@�@�@�@�@�@�E</P>
-<P>�@�@�@�@�@�@�E</P>
-<P>�@�@�@LDR R7,[R0]</P>
-<P>�@�@�@ADD R0,#4</P>
+<P>例：LDMIA R0!,{R1-R7}</P>
+<P>意味：R1～R7にR0で示されるメモリアドレスからR0を順にインクリメントしながらワードロードし1回ごとにR0にはインクリメントした値が書き戻される</P>
+<P>別解：上の例はこのような動作を1命令分で行います。</P>
+<P>　　　LDR R1,[R0]</P>
+<P>　　　ADD R0,#4</P>
+<P>　　　LDR R2,[R0]</P>
+<P>　　　ADD R0,#4</P>
+<P>　　　　　　・</P>
+<P>　　　　　　・</P>
+<P>　　　　　　・</P>
+<P>　　　LDR R7,[R0]</P>
+<P>　　　ADD R0,#4</P>
 <P>&nbsp;</P>
-<P>�⑫�F�C���N�������g�ƕ����ƃv���O��������Ă�l��+1�Ƒz�����Ă��܂��ł��傤���A���W�X�^��32bit�i4Byte�j�Ȃ̂ŁA���ۂ�4Byte</P>
-<P>�@�@�@ ��������Ă����܂��BC/C++������Ă���l�́A�A�h���X��ێ����Ă���|�C���^�ϐ����C���N�������g���Ă���ƍl���Ă�����Č��\�ł��B</P>
-<P>�@�@�@ �f�[�^�̕��тɂ���Ďg����ʂ����肳�ꂻ���ł����A�A�C�e���̌���S�čő�ɂ��铙�̏������ł������ł��B</P>
-<P>�@�@�@ �܂��ALDMIA�����s������A�x�[�X���W�X�^�̒l��ύX����STMIA�����s����ƁA�������Ԃ̓]���i�R�s�[�j���\�ł��B</P>
+<P>補足：インクリメントと聞くとプログラムやってる人は+1と想像してしまうでしょうが、レジスタが32bit（4Byte）なので、実際は4Byte</P>
+<P>　　　 ずつ足されていきます。C/C++をやっている人は、アドレスを保持しているポインタ変数をインクリメントしていると考えてもらって結構です。</P>
+<P>　　　 データの並びによって使う場面が限定されそうですが、アイテムの個数を全て最大にする等の処理ができそうです。</P>
+<P>　　　 また、LDMIAを実行した後、ベースレジスタの値を変更してSTMIAを実行すると、メモリ間の転送（コピー）が可能です。</P>
 <HR>
 
-<P class=border><A name=Nop></A>�m�[�I�y���[�V�������߁iNo Operation�j</P>
+<P class=border><A name=Nop></A>ノーオペレーション命令（No Operation）</P>
 <DIV align=left>
 <TABLE border=1 width="32%">
   <TBODY>
   <TR>
-    <TD height=19 width="38%">NOP �iMOV R8,R8�j </TD>
-    <TD width="62%">�����ω����Ȃ����߂����s����</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FMOV R8,R8</P>
-<P align=left>�Ӗ��F�m�[�I�y���[�V�����iNOP�j</P>
+    <TD height=19 width="38%">NOP （MOV R8,R8） </TD>
+    <TD width="62%">何も変化しない命令を実行する</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：MOV R8,R8</P>
+<P align=left>意味：ノーオペレーション（NOP）</P>
 <P 
-align=left>�⑫�FARM�n�v���Z�b�T�ł͏�L�̗ႪNOP�Ƃ��Ĉ����܂��B�d�v�Ȃ͖̂����s�ł͂Ȃ������Ɩ��߂����s���Ă���̂ŃT�C�N��������܂��B</P>
-<P align=left>�@�@�@ ���ꂪ���t�@�����X��NOP���߂Ȃ̂ŏ�����ׂ��ꍇ�͂Ȃ�ׂ����̌`������Ă��������B</P>
-<P align=left>�@�@�@ ARM�ł�MOV���߂ő�p���Ă܂����APS2�ł�ZERO���W�X�^��0��V�t�g�����s���Ă��܂��ˁB</P>
-<P align=left>�@�@�@ ���ӓ_�Ƃ��Ă�NOP���A���ŕ���ł���ꏊ�Ȃǂ͖��߂̏����҂��̉\�������邱�Ƃł��B���̗l�ȏꍇ�͂ނ�݂ɕύX��</P>
-<P align=left>�@�@�@ ��Ɨ\�����ʌ��ʂ������邱�Ƃ�����܂��B</P>
+align=left>補足：ARM系プロセッサでは上記の例がNOPとして扱われます。重要なのは無実行ではなくちゃんと命令を実行しているのでサイクルがあります。</P>
+<P align=left>　　　 これがリファレンスのNOP命令なので処理を潰す場合はなるべくこの形を取ってください。</P>
+<P align=left>　　　 ARMではMOV命令で代用してますが、PS2ではZEROレジスタを0回シフトを実行していますね。</P>
+<P align=left>　　　 注意点としてはNOPが連続で並んでいる場所などは命令の処理待ちの可能性があることです。その様な場合はむやみに変更す</P>
+<P align=left>　　　 ると予期せぬ結果が得られることがあります。</P>
 <HR>
 
-<P class=border><A id=Branch name=Branch></A>�������򖽗߁iBranch�j</P>
+<P class=border><A id=Branch name=Branch></A>条件分岐命令（Branch）</P>
 <DIV align=left>
 <TABLE border=1 width="69%">
   <TBODY>
   <TR>
-    <TD height=19 width="21%">BEQ [address]�ilabel�j</TD>
-    <TD width="20%">������</TD>
-    <TD width="42%">��r���ʂ����������[��</TD>
+    <TD height=19 width="21%">BEQ [address]（label）</TD>
+    <TD width="20%">等しい</TD>
+    <TD width="42%">比較結果が等しいかゼロ</TD>
     <TD width="17%">Z = 1</TD></TR>
   <TR>
-    <TD height=19>BNE [address]�ilabel�j</TD>
-    <TD>�������Ȃ�</TD>
-    <TD>��r���ʂ��������Ȃ����[���łȂ�</TD>
+    <TD height=19>BNE [address]（label）</TD>
+    <TD>等しくない</TD>
+    <TD>比較結果が等しくないかゼロでない</TD>
     <TD>Z = 0</TD></TR>
   <TR>
-    <TD height=19>BCS [address]�ilabel�j</TD>
-    <TD>�L�����[�E�Z�b�g</TD>
-    <TD>�Z�p���Z�̌��ʂ����オ�肷��</TD>
+    <TD height=19>BCS [address]（label）</TD>
+    <TD>キャリー・セット</TD>
+    <TD>算術演算の結果が桁上がりする</TD>
     <TD>C = 1</TD></TR>
   <TR>
-    <TD height=19>BCC [address]�ilabel�j</TD>
-    <TD>�L�����[�E�N���A</TD>
-    <TD>�Z�p���Z�̌��ʂ����オ�肵�Ȃ�</TD>
+    <TD height=19>BCC [address]（label）</TD>
+    <TD>キャリー・クリア</TD>
+    <TD>算術演算の結果が桁上がりしない</TD>
     <TD>C = 0</TD></TR>
   <TR>
-    <TD height=19>BMI [address]�ilabel�j</TD>
-    <TD>�}�C�i�X</TD>
-    <TD>���ʂ����܂��͔ے�</TD>
+    <TD height=19>BMI [address]（label）</TD>
+    <TD>マイナス</TD>
+    <TD>結果が負または否定</TD>
     <TD>N = 1</TD></TR>
   <TR>
-    <TD height=19>BPL [address]�ilabel�j</TD>
-    <TD>�v���X</TD>
-    <TD>���ʂ����܂��̓[��</TD>
+    <TD height=19>BPL [address]（label）</TD>
+    <TD>プラス</TD>
+    <TD>結果が正またはゼロ</TD>
     <TD>N = 0</TD></TR>
   <TR>
-    <TD height=19>BVS [address]�ilabel�j</TD>
-    <TD>�I�[�o�[�t���[�̃Z�b�g</TD>
-    <TD>�����t���������Z�ŃI�[�o�[�t���[���N����</TD>
+    <TD height=19>BVS [address]（label）</TD>
+    <TD>オーバーフローのセット</TD>
+    <TD>符号付き整数演算でオーバーフローが起きる</TD>
     <TD>V = 1</TD></TR>
   <TR>
-    <TD height=19>BVC [address]�ilabel�j</TD>
-    <TD>�I�[�o�[�t���[�̃N���A</TD>
-    <TD>�����t���������Z�ŃI�[�o�[�t���[���Ȃ�</TD>
+    <TD height=19>BVC [address]（label）</TD>
+    <TD>オーバーフローのクリア</TD>
+    <TD>符号付き整数演算でオーバーフローがない</TD>
     <TD>V = 0</TD></TR>
   <TR>
-    <TD height=19>BHI [address]�ilabel�j</TD>
-    <TD>�傫��</TD>
-    <TD>����������r�ő傫��</TD>
+    <TD height=19>BHI [address]（label）</TD>
+    <TD>大きい</TD>
+    <TD>符号無し比較で大きい</TD>
     <TD>C = 1 , Z = 0</TD></TR>
   <TR>
-    <TD height=19>BLS [address]�ilabel�j</TD>
-    <TD>������������</TD>
-    <TD>����������r�ŏ�������������</TD>
+    <TD height=19>BLS [address]（label）</TD>
+    <TD>小さいか同じ</TD>
+    <TD>符号無し比較で小さいか等しい</TD>
     <TD>C = 0 , Z = 1</TD></TR>
   <TR>
-    <TD height=19>BGE [address]�ilabel�j</TD>
-    <TD>�傫����������</TD>
-    <TD>�����t���������Z�ł��傫����������</TD>
+    <TD height=19>BGE [address]（label）</TD>
+    <TD>大きいか等しい</TD>
+    <TD>符号付き整数演算でより大きいか等しい</TD>
     <TD>N = V</TD></TR>
   <TR>
-    <TD height=19>BLT [address]�ilabel�j</TD>
-    <TD>������</TD>
-    <TD>�����t���������Z�ł�菬����</TD>
+    <TD height=19>BLT [address]（label）</TD>
+    <TD>小さい</TD>
+    <TD>符号付き整数演算でより小さい</TD>
     <TD>N != V</TD></TR>
   <TR>
-    <TD height=19>BGT [address]�ilabel�j</TD>
-    <TD>�傫��</TD>
-    <TD>�����t���������Z�ł��傫��</TD>
+    <TD height=19>BGT [address]（label）</TD>
+    <TD>大きい</TD>
+    <TD>符号付き整数演算でより大きい</TD>
     <TD>Z = 0 and N = V</TD></TR>
   <TR>
-    <TD height=19>BLE [address]�ilabel�j</TD>
-    <TD>��������������</TD>
-    <TD>�����t���������Z�ł�菬������������</TD>
+    <TD height=19>BLE [address]（label）</TD>
+    <TD>小さいか等しい</TD>
+    <TD>符号付き整数演算でより小さいか等しい</TD>
     <TD>Z = 1 or N != V</TD></TR></TBODY></TABLE></DIV>
-<P align=left>�⑫�F�܂��⑫�BZ,C,N,V���͏����t���O�ƌĂ΂����̂ŁA���ꂪ0�iOFF�j��1�iON�j���𔻕ʂ��ď������򂵂Ă��܂��B</P>
-<P align=left>�@�@�@�@��L�̏����t���O��Thumb���߂ɂ����Ėw�ǂ̖��߂����̏����t���O�̏�Ԃ�ω������Ă��܂��BARM���߂ł�</P>
+<P align=left>補足：まず補足。Z,C,N,V等は条件フラグと呼ばれるもので、これが0（OFF）か1（ON）かを判別して条件分岐しています。</P>
+<P align=left>　　　　上記の条件フラグはThumb命令において殆どの命令がこの条件フラグの状態を変化させています。ARM命令では</P>
 <P 
-align=left>�@�@�@�@�S�Ă̖��߂ɑ΂��ď����iEQ�ANE���j�������܂����AThumb���߂ł�B�iBranch�j���߂ɂ����t���ł��Ȃ��̂�</P>
-<P align=left>�@�@�@�@���̖��߂��������t���O�̉e���͎󂯂Ȃ��ƍl���Ă�����Č��\�ł��B���݂ɂ��̖��߂͂悭CMP���߂ƃy�A�Ŏg��</P>
-<P align=left>�@�@�@�@��邱�Ƃ������ł��B�ł͉��ɗ�������܂��B</P>
+align=left>　　　　全ての命令に対して条件（EQ、NE等）をつけられますが、Thumb命令ではB（Branch）命令にしか付加できないので</P>
+<P align=left>　　　　この命令しか条件フラグの影響は受けないと考えてもらって結構です。因みにこの命令はよくCMP命令とペアで使わ</P>
+<P align=left>　　　　れることが多いです。では下に例を示します。</P>
 <P align=left>&nbsp;</P>
-<P align=left>��F�@�@CMP R0,#99�@�@�@�@�@�@�@</P>
-<P align=left>�@�@�@�@BLT JUMP�@�@�@�@�@�@�@�@�@ </P>
-<P align=left>�@�@�@�@MOV R1,#99</P>
-<P align=left>�@�@�@�@STRB R1,[R2]</P>
+<P align=left>例：　　CMP R0,#99　　　　　　　</P>
+<P align=left>　　　　BLT JUMP　　　　　　　　　 </P>
+<P align=left>　　　　MOV R1,#99</P>
+<P align=left>　　　　STRB R1,[R2]</P>
 <P align=left>JUMP</P>
-<P align=left>�@�@�@�@ADD R1,#1</P>
-<P align=left>�@�@�@�@STRB R1,[R2]</P>
+<P align=left>　　　　ADD R1,#1</P>
+<P align=left>　　　　STRB R1,[R2]</P>
 <P align=left>&nbsp;</P>
-<P align=left>�Ӗ��F1�s�ځE�E�ER0-99</P>
-<P align=left>�@�@�@ 2�s�ځE�E�E��r�̌��ʂ�R0��99��菬�����ꍇ�̓��x��JUMP�ɕ��򂷂�</P>
-<P align=left>�@�@�@ 3�s�ځE�E�ER1��99���i�[����</P>
-<P align=left>�@�@�@ 4�s�ځE�E�ER2�Ŏ�����郁�����A�h���X��R1�̒l���o�C�g�X�g�A����</P>
-<P align=left>�@�@�@ 5�s�ځE�E�E���x��</P>
-<P align=left>�@�@�@ 6�s�ځE�E�ER1��1�𑫂�</P>
-<P align=left>�@�@�@ 7�s�ځE�E�E4�s�ڂƓ���</P>
+<P align=left>意味：1行目・・・R0-99</P>
+<P align=left>　　　 2行目・・・比較の結果でR0が99より小さい場合はラベルJUMPに分岐する</P>
+<P align=left>　　　 3行目・・・R1に99を格納する</P>
+<P align=left>　　　 4行目・・・R2で示されるメモリアドレスにR1の値をバイトストアする</P>
+<P align=left>　　　 5行目・・・ラベル</P>
+<P align=left>　　　 6行目・・・R1に1を足す</P>
+<P align=left>　　　 7行目・・・4行目と同じ</P>
 <P align=left>&nbsp;</P>
 <P align=left>&nbsp;</P>
 <P 
-align=left>�⑫�F�قƂ�ǂ̏ꍇ��CMP�ƃy�A�Ȃ̂�CMP�̈����Z�̌��ʂ���������������BEQ�A�������Ȃ�������BNE���ƍl���Ă��������B</P>
+align=left>補足：ほとんどの場合がCMPとペアなのでCMPの引き算の結果が等しいだったらBEQ、等しくなかったらBNE等と考えてください。</P>
 <HR>
 
-<P class=border align=left><A name=Jmp></A>���������򖽗߁iBranch�j</P>
+<P class=border align=left><A name=Jmp></A>無条件分岐命令（Branch）</P>
 <DIV align=left>
 <TABLE border=1 width="82%">
   <TBODY>
   <TR>
-    <TD height=19 width="15%">B [address]�ilabel�j</TD>
-    <TD width="85%">[PC�}2KB] �ɋ�������B�����s���Ă�v���O�����̃A�h���X����}2048Byte�܂�</TD></TR>
+    <TD height=19 width="15%">B [address]（label）</TD>
+    <TD width="85%">[PC±2KB] に強制分岐。今実行してるプログラムのアドレスから±2048Byteまで</TD></TR>
   <TR>
-    <TD height=19>BL [address]�ilabel�j</TD>
-    <TD>[PC�}4MB]�ɋ�������B�����s���Ă�v���O�����̃A�h���X����}409600Byte�܂�</TD></TR>
+    <TD height=19>BL [address]（label）</TD>
+    <TD>[PC±4MB]に強制分岐。今実行してるプログラムのアドレスから±409600Byteまで</TD></TR>
   <TR>
-    <TD height=19>BX Rd�iHs�j</TD>
-    <TD>R0�`R15�������A�h���X�ɕ���A�����ɃX�e�[�g�ύX�i��0bit��0�̏ꍇ��ARM�X�e�[�g�A1�̏ꍇ��Thumb�X�e�[�g�Ɉڍs�j</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FB�iL�j JUMP</P>
-<P align=left>�Ӗ��F���x��JUMP�ɋ�������</P>
-<P align=left>�⑫�FBL���߁iLong 
-Branch�j������Thumb���߂̒��ŗB��A1���߂�2���ߕ��i4Byte�j�g���܂��B�悭WRAM��IRAM�ɔ�΂��ď������悤��</P>
-<P align=left>�@�@�@ 
-�������Ă�l�����܂����A����������Ȃ��̂ňӖ����Ȃ��ł��B�i�����ꎞ���A�������܂������ƂĂ�����Ȃ��ł����ǎ��p�I�ł͂Ȃ��ł��j</P>
-<P align=left>�@�@�@ BX���߂�ARM���߂�Thumb���߂̐؂�ւ����s�����߂ł��B�܂��g��Ȃ��Ǝv���Ă��������B�g���΁A16bit����</P>
-<P align=left>�@�@�@ 
-32bit�ɍL����̂ň����鐔�̐��񂪊ɂ�ł�莩�R�ȃv���O�������g�߂܂����A�����R�[�h�����̂����������Ȃ�܂��E�E�E�i���j�B</P>
+    <TD height=19>BX Rd（Hs）</TD>
+    <TD>R0～R15が示すアドレスに分岐、同時にステート変更（第0bitが0の場合はARMステート、1の場合はThumbステートに移行）</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：B（L） JUMP</P>
+<P align=left>意味：ラベルJUMPに強制分岐</P>
+<P align=left>補足：BL命令（Long 
+Branch）だけはThumb命令の中で唯一、1命令で2命令分（4Byte）使います。よくWRAMやIRAMに飛ばして処理しようと</P>
+<P align=left>　　　 
+研究してる人がいますが、距離が足りないので意味がないです。（私も一時期、研究しましたがとてもじゃないですけど実用的ではないです）</P>
+<P align=left>　　　 BX命令はARM命令とThumb命令の切り替えを行う命令です。まず使わないと思ってください。使えば、16bitから</P>
+<P align=left>　　　 
+32bitに広がるので扱える数の制約が緩んでより自由なプログラムが組めますが、改造コードがものすごく長くなります・・・（汗）。</P>
 <HR>
 
-<P class=border align=left><A name=Swi></A>�\�t�g�E�F�A���荞�݁iSoftware Interrupt�j</P>
+<P class=border align=left><A name=Swi></A>ソフトウェア割り込み（Software Interrupt）</P>
 <DIV align=left>
 <TABLE border=1 width="92%">
   <TBODY>
   <TR>
     <TD height=19 width="8%">SWI #imm</TD>
-    <TD width="92%">���̖��߂̃A�h���X��LR�ɃR�s�[�ACPSR�̓��e�� 
-      SPSR_svc�ɃR�s�[�ASWI�x�N�^�A�h���X��PC�ɃR�s�[���āAARM�X�e�[�g�ɐ؂�ւ��ASVC���[�h�ɓ���</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FSWI 10</P>
-<P align=left>�Ӗ��F�\�t�g�E�F�A���荞�ݗ�O�𔭐�������B�����ԍ�10��SWI�n���h���ɓn���B</P>
-<P align=left>�⑫�FBIOS�̃t�@���N�V�����R�[���Ȃ̂Ŏg���ǂ��낪�Ȃ��ł��BGBA�Ńv���O������������ꍇ�A�܂��g��Ȃ����߂ł��i�΁j�B</P>
+    <TD width="92%">次の命令のアドレスをLRにコピー、CPSRの内容を 
+      SPSR_svcにコピー、SWIベクタアドレスをPCにコピーして、ARMステートに切り替え、SVCモードに入る</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：SWI 10</P>
+<P align=left>意味：ソフトウェア割り込み例外を発生させる。処理番号10をSWIハンドラに渡す。</P>
+<P align=left>補足：BIOSのファンクションコールなので使いどころがないです。GBAでプログラム改造する場合、まず使わない命令です（笑）。</P>
 <HR>
 
-<P class=border><A name=Break></A>�u���[�N�|�C���g�iBreakpoint�j</P>
+<P class=border><A name=Break></A>ブレークポイント（Breakpoint）</P>
 <DIV align=left>
 <TABLE border=1 width="41%">
   <TBODY>
   <TR>
     <TD height=19 width="19%">BKPT #imm</TD>
     <TD 
-width="81%">�u���[�N�|�C���g��ݒu����B#imm�̒l�́i8bit=255�j�܂�</TD></TR></TBODY></TABLE></DIV>
-<P align=left>��FBKPT #1</P>
-<P align=left>�Ӗ��F�u���[�N�|�C���g��ݒu�B�ݒu�ԍ���1</P>
-<P>�⑫�F���̖��߂��܂��g��Ȃ��ł��B�f�o�b�K��������ɐݒ肵�Ă���܂��B�f�o�b�K���̓�������Ă݂�Ƃǂ����#imm�̒l��</P>
-<P>�@�@�@ �ݒu�ԍ��̂悤�B1�Ԗڂ̃u���[�N�|�C���g�ɂ�1��2�Ԗڂɂ�2�Ƃ��������B���̖��߂�CPU�ɑ΂��Ď��s�ł���Ƃ������Ƃ́A</P>
-<P>�@�@�@ GBA��CPU��ARM�A�[�L�e�N�`��version5T���������Ă�͗l�B��������Ɩ��������򖽗߂�[BLX]���g�������ȗ\�������E�E�E�B</P>
+width="81%">ブレークポイントを設置する。#immの値は（8bit=255）まで</TD></TR></TBODY></TABLE></DIV>
+<P align=left>例：BKPT #1</P>
+<P align=left>意味：ブレークポイントを設置。設置番号は1</P>
+<P>補足：この命令もまず使わないです。デバッガ側が勝手に設定してくれます。デバッガ側の動作を見てみるとどうやら#immの値は</P>
+<P>　　　 設置番号のよう。1番目のブレークポイントには1が2番目には2という感じ。この命令をCPUに対して実行できるということは、</P>
+<P>　　　 GBAのCPUはARMアーキテクチャversion5Tを実装してる模様。そうすると無条件分岐命令の[BLX]も使えそうな予感だが・・・。</P>
 <HR>
 
-<P class=border align=left><A name=Loop></A>�������[�v�̗�</P>
+<P class=border align=left><A name=Loop></A>条件ループの例</P>
 <P align=left>&nbsp;</P>
 <P 
-align=left>�������[�v�̗���ȒP�ɐ������܂��B���̎��A[R2=0x2000000]�Ƃ��܂��B���̃��[�v�̓������A�h���X0x2000000����+2h���A�h���X��</P>
+align=left>条件ループの例を簡単に説明します。この時、[R2=0x2000000]とします。このループはメモリアドレス0x2000000から+2hずつアドレスを</P>
 <P 
-align=left>�����Ă����Ȃ���R1��R3�̒l���������݂�����v���O�����ł��B���ʂƂ���0163�A0263�A0363�A0463�A0563�E�E�EFF63�܂ŏ������݂��J��Ԃ��܂��B</P>
+align=left>足していきながらR1とR3の値を書き込みをするプログラムです。結果として0163、0263、0363、0463、0563・・・FF63まで書き込みを繰り返します。</P>
 <P 
-align=left>���̂悤�ȃ��[�v�̓A�C�e���ԍ��ƌ����A�����ĕ���ł���f�[�^���ɑ΂��ėL�p�ȃ��[�v���Ǝv���܂��BGBA�ł͂���܂��񂪎��ۃt�@�C�i</P>
-<P align=left>���t�@���^�W�[4�͂��̌`���ł����B������PAR��X-TA�ɂ͘A���������݃R�[�h������̂ŁA�قƂ�ǎg��Ȃ������i���j�B</P>
+align=left>このようなループはアイテム番号と個数が連続して並んでいるデータ等に対して有用なループだと思われます。GBAではありませんが実際ファイナ</P>
+<P align=left>ルファンタジー4はこの形式でした。しかしPARやX-TAには連続書き込みコードがあるので、ほとんど使わないかも（汗）。</P>
 <P align=left>&nbsp;</P>
-<P align=left>CMP���߂��g���������[�v�̗�F</P>
-<P align=left>�@�@�@�@�@MOV R0,#255�@�@�@�@�@�@�@�@�@�@�@�@;R0 = 255�@�i�J�E���g�p�̒l255���i�[�j</P>
-<P align=left>�@�@�@�@�@MOV R1,#1�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R1 = 1�@�i�A�C�e���ԍ��̏����l1���i�[�j</P>
-<P align=left>�@�@�@�@�@MOV R3,#99�@�@�@�@�@�@�@�@�@�@�@�@ ;R3 = 99�@�i�A�C�e���̍ő��99���i�[�j</P>
+<P align=left>CMP命令を使う条件ループの例：</P>
+<P align=left>　　　　　MOV R0,#255　　　　　　　　　　　　;R0 = 255　（カウント用の値255を格納）</P>
+<P align=left>　　　　　MOV R1,#1　　　　　　　　　　　　　 ;R1 = 1　（アイテム番号の初期値1を格納）</P>
+<P align=left>　　　　　MOV R3,#99　　　　　　　　　　　　 ;R3 = 99　（アイテムの最大個数99を格納）</P>
 <P align=left>LOOP</P>
-<P align=left>�@�@�@�@�@STRB R1,[R2]�@�@�@�@�@�@�@�@�@�@�@ ;[R2] = 
-R1�@�iR2�̒l�������������A�h���X��R1�̒l���o�C�g�X�g�A�j</P>
-<P align=left>�@�@�@�@�@STRB R3,[R2,#1]�@�@�@�@�@�@�@�@�@ ;[R2 + 1] = 
-R3�@�iR2��1�𑫂����l�������������A�h���X��R3�̒l���o�C�g�X�g�A�j</P>
-<P align=left>�@�@�@�@�@ADD R2,#2�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R2 = R2 + 2�@�iR2��2�����j</P>
-<P align=left>�@�@�@�@�@ADD R1,#1�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R1 = R1 + 1�@�iR1��1�����j</P>
-<P align=left>�@�@�@�@�@SUB R0,#1�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R0 = R0 - 1�@�iR0����1�����j</P>
-<P align=left>�@�@�@�@�@CMP R0,#0�@�@�@�@�@�@�@�@�@�@�@�@�@;R0 = R0 - 0�@�i��r���Z���錋�ʂ�CPSR�֊i�[�����j</P>
-<P align=left>�@�@�@�@�@BNE LOOP�@�@�@�@�@�@�@�@�@�@�@�@�@ ;�iR0 - 0���������Ȃ� <FONT color=#ff0000>�iR0 
-&gt; 0 or R0 &lt; 0�j</FONT> �ꍇLOOP�ɕ���j</P>
-<P align=left>�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@;�i�t��R0 = 0�ł������Ȃ番�򂹂��ɑf�ʂ�j</P>
+<P align=left>　　　　　STRB R1,[R2]　　　　　　　　　　　 ;[R2] = 
+R1　（R2の値が示すメモリアドレスにR1の値をバイトストア）</P>
+<P align=left>　　　　　STRB R3,[R2,#1]　　　　　　　　　 ;[R2 + 1] = 
+R3　（R2に1を足した値が示すメモリアドレスにR3の値をバイトストア）</P>
+<P align=left>　　　　　ADD R2,#2　　　　　　　　　　　　　 ;R2 = R2 + 2　（R2に2足す）</P>
+<P align=left>　　　　　ADD R1,#1　　　　　　　　　　　　　 ;R1 = R1 + 1　（R1に1足す）</P>
+<P align=left>　　　　　SUB R0,#1　　　　　　　　　　　　　 ;R0 = R0 - 1　（R0から1引く）</P>
+<P align=left>　　　　　CMP R0,#0　　　　　　　　　　　　　;R0 = R0 - 0　（比較演算する結果はCPSRへ格納される）</P>
+<P align=left>　　　　　BNE LOOP　　　　　　　　　　　　　 ;（R0 - 0が等しくない <FONT color=#ff0000>（R0 
+&gt; 0 or R0 &lt; 0）</FONT> 場合LOOPに分岐）</P>
+<P align=left>　　　　　　　　　　　　　　　　　　　　　　　　　;（逆にR0 = 0であったなら分岐せずに素通り）</P>
 <P align=left>&nbsp;</P>
-<P align=left>CMP���g��Ȃ��������[�v�̗�F</P>
-<P align=left>�@�@�@�@�@MOV R0,#255�@�@�@�@�@�@�@�@�@�@�@�@;R0 = 255�@�i�J�E���g�p�̒l255���i�[�j</P>
-<P align=left>�@�@�@�@�@MOV R1,#1�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R1 = 1�@�i�A�C�e���ԍ��̏����l1���i�[�j</P>
-<P align=left>�@�@�@�@�@MOV R3,#99�@�@�@�@�@�@�@�@�@�@�@�@ ;R3 = 99�@�i�A�C�e���̍ő��99���i�[�j</P>
+<P align=left>CMPを使わない条件ループの例：</P>
+<P align=left>　　　　　MOV R0,#255　　　　　　　　　　　　;R0 = 255　（カウント用の値255を格納）</P>
+<P align=left>　　　　　MOV R1,#1　　　　　　　　　　　　　 ;R1 = 1　（アイテム番号の初期値1を格納）</P>
+<P align=left>　　　　　MOV R3,#99　　　　　　　　　　　　 ;R3 = 99　（アイテムの最大個数99を格納）</P>
 <P align=left>LOOP</P>
-<P align=left>�@�@�@�@�@STRB R1,[R2]�@�@�@�@�@�@�@�@�@�@�@ ;[R2] = 
-R1�@�iR2�̒l�������������A�h���X��R1�̒l���o�C�g�X�g�A�j</P>
-<P align=left>�@�@�@�@�@STRB R3,[R2,#1]�@�@�@�@�@�@�@�@�@ ;[R2 + 1] = 
-R3�@�iR2��1�𑫂����l�������������A�h���X��R3�̒l���o�C�g�X�g�A�j</P>
-<P align=left>�@�@�@�@�@ADD R2,#2�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R2 = R2 + 2�@�iR2��2�����j</P>
-<P align=left>�@�@�@�@�@ADD R1,#1�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R1 = R1 + 1�@�iR1��1�����j</P>
-<P align=left>�@�@�@�@�@SUB R0,#1�@�@�@�@�@�@�@�@�@�@�@�@�@ ;R0 = R0 - 
-1�@�iR0����1�����B���̎��A���Z���ʂ�CPSR��<FONT color=#ff0000> �����t���O�ɃZ�b�g</FONT> �����j</P>
-<P align=left>�@�@�@�@�@BGT LOOP�@�@�@�@�@�@�@�@�@�@�@�@�@ ;�i (R0 = R0 - 1) �� <FONT 
-color=#ff0000>0�ȏ� </FONT>�Ȃ�LOOP�ɕ��򂷂�j</P>
-<P align=left>�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@�@;�i�����t���������Z�̌��ʂ�<FONT color=#ff0000> 
-0��菬�����Ȃ� </FONT>���򂹂��ɑf�ʂ�j</P>
+<P align=left>　　　　　STRB R1,[R2]　　　　　　　　　　　 ;[R2] = 
+R1　（R2の値が示すメモリアドレスにR1の値をバイトストア）</P>
+<P align=left>　　　　　STRB R3,[R2,#1]　　　　　　　　　 ;[R2 + 1] = 
+R3　（R2に1を足した値が示すメモリアドレスにR3の値をバイトストア）</P>
+<P align=left>　　　　　ADD R2,#2　　　　　　　　　　　　　 ;R2 = R2 + 2　（R2に2足す）</P>
+<P align=left>　　　　　ADD R1,#1　　　　　　　　　　　　　 ;R1 = R1 + 1　（R1に1足す）</P>
+<P align=left>　　　　　SUB R0,#1　　　　　　　　　　　　　 ;R0 = R0 - 
+1　（R0から1引く。この時、演算結果がCPSRの<FONT color=#ff0000> 条件フラグにセット</FONT> される）</P>
+<P align=left>　　　　　BGT LOOP　　　　　　　　　　　　　 ;（ (R0 = R0 - 1) が <FONT 
+color=#ff0000>0以上 </FONT>ならLOOPに分岐する）</P>
+<P align=left>　　　　　　　　　　　　　　　　　　　　　　　　　;（符号付き整数演算の結果が<FONT color=#ff0000> 
+0より小さいなら </FONT>分岐せずに素通り）</P>
 <P align=left>&nbsp;</P>
-<P align=left>�⑫�F�܂�1�s�����������ł����ACMP�g��Ȃ��ق���1���ߕ��Ȃ��܂��B����Ă���͂������̕���������������܂���B</P>
-<P align=left>�@�@�@ PAR�p�ɒ�����1�s���Ȃ��܂�����ˁB���Ȃ݂ɏ����Ă܂���ADD���߂�CPSR�ɏ����t���O���Z�b�g���Ă��܂��B</P>
+<P align=left>補足：まぁ1行減っただけですが、CMP使わないほうが1命令分省けます。慣れてる方はこっちの方がいいかもしれません。</P>
+<P align=left>　　　 PAR用に直すと1行分省けますからね。ちなみに書いてませんがADD命令もCPSRに条件フラグをセットしています。</P>
 <HR>
 </DIV>
 <DIV style="MARGIN-BOTTOM: 7px" align=center>
